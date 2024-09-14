@@ -2,10 +2,13 @@ import re
 import smtplib
 import dns.resolver
 
-# Lista de dominios de correos temporales conocidos
+# Lista ampliada de dominios de correos temporales conocidos
 correos_temporales = [
     "10minutemail.com", "guerrillamail.com", "mailinator.com", "tempmail.com", "trashmail.com",
-    "yopmail.com", "dispostable.com", "getnada.com"
+    "yopmail.com", "dispostable.com", "getnada.com", "temp-mail.org", "mohmal.com",
+    "maildrop.cc", "fakeinbox.com", "mytemp.email", "throwawaymail.com", "sharklasers.com",
+    "guerillamail.net", "mailcatch.com", "emailondeck.com", "spambog.com", "getairmail.com",
+    "inboxkitten.com", "mintemail.com", "putmail.net", "wegwerfmail.de", "meltmail.com"
 ]
 
 # Función para validar el formato del correo
@@ -61,29 +64,57 @@ def verificar_correo(correo):
     else:
         return None
 
-# Función principal
-def main():
-    correo = input("Introduce el correo electrónico: ")
-
+# Función para procesar un solo correo
+def procesar_correo(correo):
     # Validar el formato del correo
     if not validar_correo(correo):
-        print("El formato del correo no es válido.")
+        print(f"El formato del correo '{correo}' no es válido.")
         return
     
     # Comprobar si es correo temporal
     dominio = correo.split('@')[1]
     if es_correo_temporal(dominio):
-        print("El correo pertenece a un dominio de correo temporal.")
+        print(f"El correo '{correo}' pertenece a un dominio de correo temporal.")
         return
 
     # Verificar si el correo existe
     resultado = verificar_correo(correo)
     if resultado is True:
-        print("El correo existe.")
+        print(f"El correo '{correo}' existe.")
     elif resultado is False:
-        print("El correo no existe.")
+        print(f"El correo '{correo}' no existe.")
     else:
-        print("No se pudo verificar la existencia del correo.")
+        print(f"No se pudo verificar la existencia del correo '{correo}'.")
+
+# Función para procesar un archivo de correos
+def procesar_archivo(ruta_archivo):
+    try:
+        with open(ruta_archivo, 'r') as archivo:
+            correos = archivo.readlines()
+            for correo in correos:
+                correo = correo.strip()  # Eliminar espacios en blanco o saltos de línea
+                procesar_correo(correo)
+    except FileNotFoundError:
+        print(f"El archivo {ruta_archivo} no se encontró.")
+    except Exception as e:
+        print(f"Error al procesar el archivo: {e}")
+
+# Función principal
+def main():
+    print("Selecciona una opción:")
+    print("0: Introducir un correo manualmente")
+    print("1: Cargar un archivo .txt con una lista de correos")
+    
+    opcion = input("Ingresa 0 o 1: ")
+
+    if opcion == "0":
+        correo = input("Introduce el correo electrónico: ")
+        procesar_correo(correo)
+    elif opcion == "1":
+        ruta_archivo = input("Introduce la ruta del archivo .txt: ")
+        procesar_archivo(ruta_archivo)
+    else:
+        print("Opción no válida. Intenta de nuevo.")
 
 if __name__ == "__main__":
     main()
