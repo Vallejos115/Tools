@@ -4,6 +4,7 @@ import smtplib
 import dns.resolver
 import readline
 from colorama import init, Fore, Style
+import pyfiglet
 
 # Inicializar colorama
 init(autoreset=True)
@@ -119,20 +120,25 @@ def procesar_archivo(ruta_archivo):
 
 # Función principal
 def main():
-    print("Selecciona una opción:")
-    print("0: Introducir un correo manualmente")
-    print("1: Cargar un archivo .txt con una lista de correos")
+    # Pixel art inicial
+    arte = pyfiglet.figlet_format("CORREITOS", font="slant")
+    print(Fore.CYAN + arte)
+
+    # Opciones de entrada
+    print(Fore.MAGENTA + "Selecciona una opción:")
+    print(Fore.CYAN + "0: Introducir un correo manualmente")
+    print(Fore.CYAN + "1: Cargar un archivo .txt con una lista de correos")
     
-    opcion = input("Ingresa 0 o 1: ")
+    opcion = input(Fore.YELLOW + "Ingresa 0 o 1: ")
 
     if opcion == "0":
-        correo = input("Introduce el correo electrónico: ")
+        correo = input(Fore.YELLOW + "Introduce el correo electrónico: ")
         procesar_correo(correo)
     elif opcion == "1":
-        ruta_archivo = input("Introduce la ruta del archivo .txt: ")
+        ruta_archivo = input(Fore.YELLOW + "Introduce la ruta del archivo .txt: ")
         procesar_archivo(ruta_archivo)
     else:
-        print("Opción no válida. Intenta de nuevo.")
+        print(Fore.RED + "Opción no válida. Intenta de nuevo.")
 
 if __name__ == "__main__":
     main()
