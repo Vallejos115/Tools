@@ -118,27 +118,36 @@ def procesar_archivo(ruta_archivo):
     except Exception as e:
         print(f"Error al procesar el archivo: {e}")
 
+# Función para mostrar las opciones del menú
+def mostrar_menu():
+    print(Fore.MAGENTA + "Selecciona una opción:")
+    print(Fore.CYAN + "0: Introducir un correo manualmente")
+    print(Fore.CYAN + "1: Cargar un archivo .txt con una lista de correos")
+    print(Fore.RED + "2: Salir del programa")
+
 # Función principal
 def main():
     # Pixel art inicial
     arte = pyfiglet.figlet_format("CORREITOS", font="slant")
     print(Fore.CYAN + arte)
 
-    # Opciones de entrada
-    print(Fore.MAGENTA + "Selecciona una opción:")
-    print(Fore.CYAN + "0: Introducir un correo manualmente")
-    print(Fore.CYAN + "1: Cargar un archivo .txt con una lista de correos")
-    
-    opcion = input(Fore.YELLOW + "Ingresa 0 o 1: ")
+    # Bucle principal para mantener el menú activo hasta seleccionar "2"
+    while True:
+        mostrar_menu()
+        
+        opcion = input(Fore.YELLOW + "Ingresa 0, 1 o 2: ")
 
-    if opcion == "0":
-        correo = input(Fore.YELLOW + "Introduce el correo electrónico: ")
-        procesar_correo(correo)
-    elif opcion == "1":
-        ruta_archivo = input(Fore.YELLOW + "Introduce la ruta del archivo .txt: ")
-        procesar_archivo(ruta_archivo)
-    else:
-        print(Fore.RED + "Opción no válida. Intenta de nuevo.")
+        if opcion == "0":
+            correo = input(Fore.YELLOW + "Introduce el correo electrónico: ")
+            procesar_correo(correo)
+        elif opcion == "1":
+            ruta_archivo = input(Fore.YELLOW + "Introduce la ruta del archivo .txt: ")
+            procesar_archivo(ruta_archivo)
+        elif opcion == "2":
+            print(Fore.GREEN + "Saliendo del programa... ¡Adiós!")
+            break
+        else:
+            print(Fore.RED + "Opción no válida. Intenta de nuevo.")
 
 if __name__ == "__main__":
     main()
