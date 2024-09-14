@@ -1,6 +1,12 @@
+import os
 import re
 import smtplib
 import dns.resolver
+import readline
+from colorama import init, Fore, Style
+
+# Inicializar colorama
+init(autoreset=True)
 
 # Lista ampliada de dominios de correos temporales conocidos
 correos_temporales = [
@@ -10,6 +16,18 @@ correos_temporales = [
     "guerillamail.net", "mailcatch.com", "emailondeck.com", "spambog.com", "getairmail.com",
     "inboxkitten.com", "mintemail.com", "putmail.net", "wegwerfmail.de", "meltmail.com"
 ]
+
+# Función para autocompletado de archivos
+def completar(texto, estado):
+    opciones = [archivo for archivo in os.listdir('.') if archivo.startswith(texto)]
+    try:
+        return opciones[estado]
+    except IndexError:
+        return None
+
+# Configurar el autocompletado de readline
+readline.set_completer(completar)
+readline.parse_and_bind("tab: complete")
 
 # Función para validar el formato del correo
 def validar_correo(correo):
@@ -36,7 +54,7 @@ def verificar_correo(correo):
     
     if registros_mx:
         servidor_mx = str(registros_mx[0].exchange)  # Tomamos el servidor MX con la mayor prioridad
-        print(f"Conectando con el servidor MX: {servidor_mx}")
+        print(Fore.BLUE + f"Conectando con el servidor MX: {servidor_mx}")
 
         # Conectarse al servidor de correo usando el puerto 25 (SMTP)
         try:
@@ -74,15 +92,15 @@ def procesar_correo(correo):
     # Comprobar si es correo temporal
     dominio = correo.split('@')[1]
     if es_correo_temporal(dominio):
-        print(f"El correo '{correo}' pertenece a un dominio de correo temporal.")
+        print(Fore.YELLOW + f"El correo '{correo}' pertenece a un dominio de correo temporal.")
         return
 
     # Verificar si el correo existe
     resultado = verificar_correo(correo)
     if resultado is True:
-        print(f"El correo '{correo}' existe.")
+        print(Fore.GREEN + f"El correo '{correo}' existe.")
     elif resultado is False:
-        print(f"El correo '{correo}' no existe.")
+        print(Fore.RED + f"El correo '{correo}' no existe.")
     else:
         print(f"No se pudo verificar la existencia del correo '{correo}'.")
 
